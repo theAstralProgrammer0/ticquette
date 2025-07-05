@@ -1,5 +1,14 @@
 import express from 'express';
-import routes from './routes/index';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import morgan from 'morgan';
+import dotenv from 'dotenv';
+import userRoutes from './routes/userRoutes';
+import nftRoutes from './routes/nftRooutes';
+
+dotenv.config();
+
 
 /* create express app */
 const app = express();
