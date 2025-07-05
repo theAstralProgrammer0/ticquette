@@ -11,15 +11,14 @@ import userRoutes from './routes/userRoutes';
 import nftRoutes from './routes/nftRooutes';
 
 // Import database connection
-import { dbClient } from './config/database';
-import { redisClient } from './config/redis';
+import connectDB from './config/database';
+import redisClient from './config/redis';
 
-
-// create express app
 const app = express();
-
-// define port
 const port = process.env.PORT || '5000';
+
+// Connect DB
+connectDB();
 
 // Security middleware
 app.use(helmet());
@@ -48,7 +47,8 @@ app.use(morgan('combined'));
 
 
 /* use all routes from routes/index */
-app.use(routes);
+app.use('/api', userRoutes);
+app.use('/api', nftRoutes);
 
 /* start the server */
 app.listen(port, () => {
