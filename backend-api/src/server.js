@@ -4,15 +4,16 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import path from 'path';
 dotenv.config();
 
 // Import routes
-import userRoutes from './routes/userRoutes';
-import nftRoutes from './routes/nftRooutes';
+import userRoutes from './routes/userRoutes.js';
+//import nftRoutes from './routes/nftRooutes';
 
 // Import database connection
-import { dbClient } from './config/database';
-import { redisClient } from './config/redis';
+//import { dbClient } from './config/database';
+//import { redisClient } from './config/redis';
 
 
 // create express app
@@ -44,11 +45,14 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Logging
 app.use(morgan('combined'));
 
-//
 
+/* use all routes from routes/ */
+app.use(userRoutes);
 
-/* use all routes from routes/index */
-app.use(routes);
+// When no route matches 
+app.all('*', (req, res, next) => {
+    return res.sendFile(path.join(path.resolve(), 'src/public', 'index.html'));
+});
 
 /* start the server */
 app.listen(port, () => {
@@ -57,5 +61,3 @@ app.listen(port, () => {
 
 /* export app */
 export default app;
-
-
