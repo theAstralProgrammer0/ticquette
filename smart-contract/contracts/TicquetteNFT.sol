@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol"; // Import IERC721 explicitly
 
 contract TicquetteNFT is ERC721, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
@@ -38,8 +39,10 @@ contract TicquetteNFT is ERC721, ERC721URIStorage, Ownable {
 
     constructor(address initialOwner) 
         ERC721("TicquetteNFT", "TICQ") 
-        Ownable(initialOwner) 
-    {}
+    {
+        // Initialize Ownable with the initialOwner after ERC721
+        _transferOwnership(initialOwner);
+    }
 
     function safeMint(
         address to,
@@ -117,7 +120,7 @@ contract TicquetteNFT is ERC721, ERC721URIStorage, Ownable {
         return ownerTokens[owner];
     }
 
-    function transferFrom(address from, address to, uint256 tokenId) public override {
+    function transferFrom(address from, address to, uint256 tokenId) public virtual override(ERC721, IERC721) {
         require(isLeaseActive(tokenId), "Cannot transfer expired lease");
         
         // Update owner token lists
@@ -129,7 +132,11 @@ contract TicquetteNFT is ERC721, ERC721URIStorage, Ownable {
         emit LeaseTransferred(tokenId, from, to);
     }
 
-    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) public override {
+    function safeTransferFrom(address from, address to, uint256 tokenId) public virtual override(ERC721, IERC721) {
+        safeTransferFrom(from, to, tokenId, "");
+    }
+
+    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) public virtual override(ERC721, IERC721) {
         require(isLeaseActive(tokenId), "Cannot transfer expired lease");
         
         // Update owner token lists
