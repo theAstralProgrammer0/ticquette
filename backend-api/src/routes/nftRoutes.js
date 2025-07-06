@@ -1,4 +1,3 @@
-import express from 'express';
 import { Router } from 'express';
 import { mintNFT, getAllNFTs, getNFTByTokenId } from '../controllers/nftController';
 
