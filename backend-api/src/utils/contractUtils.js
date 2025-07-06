@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import contractABI from '../../../smart-contract/artifacts/contracts/TicquetteNFT.sol/TicquetteNFT.json';
+import contractABI from '../../../smart-contract/artifacts/contracts/TicquetteNFT.sol/TicquetteNFT.json' assert { type: 'json' };
 import dotenv from 'dotenv';
 dotenv.config();
 
