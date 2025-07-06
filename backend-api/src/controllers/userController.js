@@ -41,9 +41,8 @@ export const getUsers = async (req, res) => {
     // Get a user by Id
     // No authorization check yet
     const { id } = req.params;
-    const Id = parseInt(id);
     try {
-        const user = await User.findById(Id);
+        const user = await User.findById(id);
         return res.status(200).json({ "User": user })   
     } catch (error) {
         console.log(error);
