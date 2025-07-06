@@ -1,21 +1,12 @@
-<<<<<<< HEAD
-import { Router } from "express";
-import userController from "../controllers/userController.js"
-
-const router = Router();
-
-router.get('/users', userController.getUsers);
-router.get('/user/:id', userController.getUserById);
-
-export default router;
-=======
 import { Router } from 'express';
-import { postNewUser } from '../controllers/userController';
+import { postNewUser,
+            getUsers,
+            getUserById } from '../controllers/userController.js';
 
 const router = Router();
 
+router.get('/users', getUsers);
+router.get('/user/:id', getUserById);
 router.post('/users', postNewUser);
 
 export default router;
-
->>>>>>> master

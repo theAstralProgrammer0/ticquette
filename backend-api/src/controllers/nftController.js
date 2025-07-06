@@ -1,8 +1,7 @@
-import { pinMetadataToIPFS } from '../utils/ipfsUtils';
-import { mintOnBlockchain } from '../utils/contractUtils';
-import NFT from '../models/NFT';
-import { validateMetadata } frim '../utils/validation';
-import redisClient from '../utils/redis';
+import { pinMetadataToIPFS } from '../utils/ipfsUtils.js';
+import { mintOnBlockchain } from '../utils/contractUtils.js';
+import NFT from '../models/NFT.js';
+import { validateMetadata } from '../utils/validation.js';
 
 export const mintNFT = async (req, res) => {
   try {

@@ -13,10 +13,7 @@
     "lint:fix": "eslint src/ --fix"
   },
   "dependencies": {
-<<<<<<< HEAD
-=======
     "@pinata/sdk": "^2.1.0",
->>>>>>> master
     "axios": "^1.5.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -26,10 +23,6 @@
     "express-validator": "^7.0.1",
     "form-data": "^4.0.0",
     "helmet": "^7.0.0",
-<<<<<<< HEAD
-    "mongodb": "^6.17.0",
-=======
->>>>>>> master
     "mongoose": "^7.5.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",

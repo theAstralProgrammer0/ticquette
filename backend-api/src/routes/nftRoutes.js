@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { mintNFT, getAllNFTs, getNFTByTokenId } from '../controllers/nftController';
+import { mintNFT, getAllNFTs, getNFTByTokenId } from '../controllers/nftController.js';
 
 const router = Router();
 
