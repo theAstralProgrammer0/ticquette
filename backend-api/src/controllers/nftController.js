@@ -1,51 +1,55 @@
-import { pinJSONToIPFS } from '../utils/ipfsUtils';
-import { safeMintNFT } from '../utils/contractUtils';
+import { pinMetadataToIPFS } from '../utils/ipfsUtils';
+import { mintOnBlockchain } from '../utils/contractUtils';
+import NFT from '../models/NFT';
+import { validateMetadata } frim '../utils/validation';
+import redisClient from '../utils/redis';
 
-exports.mintNFT = async (req, res) => {
+export const mintNFT = async (req, res) => {
   try {
-    const {
-      walletAddress,
-      useOfSpace,
-      description,
-      dimensionOfSpace,
-      lga,
-      state,
-      country,
-      durationOfLease
-    } = req.body;
+    const { walletAddress, ...metadata } = req.body;
 
-    if (!walletAddress || !useOfSpace || !description) return res.status(400).json({ error: 'Missing required fields' });
+    const validationError = validateMetadata(metadata);
+    if (!walletAddress) return res.status(400).json({ error: 'Wallet address required' });
+    if (validationError) return res.status(400).json({ error: validationError });
 
-    const metadata = {
-      name: 'Ticquette NFT',
-      description,
-      useOfSpace,
-      dimensionOfSpace,
-      lga,
-      state,
-      country,
-      durationOfLease,
-      timestampL new Date().toISOString()
-    };
+    /* Check Redis cache */
+    const cacheKey = `mint:${walletAddress}`;
+    const cached = await redisClient.get(cacheKey);
+    if (cached) return res.status(429).json({ error: 'Minting too frequently. Please wait...' });
 
-    const metadataCID = await pinJSONToIPFS(metadata);
-    const tokenURI = `https://gateway.pinata.cloud/ipfs/${metadataCID}`;
+    /* Save cache entry for 30 sec. to prevent spam */
+    await redisClient.set(cacheKey, 'true', 30);
 
-    const { tokenId, receipt } = await safeMintNFT(walletAddress, tokenURI, { useOfSpace, descsription, dimensionsOfSpace, lga, state, country, durationOfLease });
+    /* 1. Pin metadata to IPFS */
+    const metadataCID = await pinMetadataToIPFS(metadata);
 
-    const expirationDate = new Date(Date.now() + durationOfLease * 1000).toISOString();
+    /* 2. Interact with smart contract to mint */
+    const { tokenId, expirationDate } = await mintOnBlockchain(walletAddress, metadataCID, metadata);
 
-    res.status(201).json({
+    /* 3. Save to DB */
+    const nft = await NFT.create({
       tokenId,
       metadataCID,
       owner: walletAddress,
-      leaseDuration: durationOfLease,
+      leaseDuration: metadata.durationOfLease,
       expirationDate
     });
-  } catch (err) {
+
+    res.status(201).json(nft);
+  } 
+  catch(err) {
     console.error(err);
     res.status(500).json({ error: 'Minting failed' });
   }
 };
 
-            
+export const getAllNFTs = async (req, res) => {
+  const nfts = await NFT.find();
+  res.status(200).json(nfts);
+};
+
+export const getNFTByTokenId = async (req, res) => {
+  const nft = await NFT.findOne({ tokenId: req.params.tokenId });
+  if (!nft) return res.status(404).json({ error: 'NFT not found' });
+  res.status(200).json(nft);
+};
