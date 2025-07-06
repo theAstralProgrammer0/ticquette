@@ -12,15 +12,19 @@ import userRoutes from './routes/userRoutes.js';
 //import nftRoutes from './routes/nftRooutes';
 
 // Import database connection
+<<<<<<< HEAD
 // import { dbClient } from './config/database.js';
 //import { redisClient } from './config/redis';
+=======
+import connectDB from './config/database';
+import redisClient from './config/redis';
+>>>>>>> master
 
-
-// create express app
 const app = express();
-
-// define port
 const port = process.env.PORT || '5000';
+
+// Connect DB
+connectDB();
 
 // Security middleware
 app.use(helmet());
@@ -49,10 +53,16 @@ app.use(morgan('combined'));
 /* use all routes from routes/ */
 app.use('/api', userRoutes);
 
+<<<<<<< HEAD
 // When no route matches 
 app.all('*', (req, res, next) => {
     return res.sendFile(path.join(path.resolve(), 'src/public', 'index.html'));
 });
+=======
+/* use all routes from routes/index */
+app.use('/api', userRoutes);
+app.use('/api', nftRoutes);
+>>>>>>> master
 
 /* start the server */
 app.listen(port, () => {
