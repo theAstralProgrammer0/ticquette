@@ -24,7 +24,7 @@ export const mintNFT = async (req, res) => {
     const metadataCID = await pinMetadataToIPFS(metadata);
 
     /* 2. Interact with smart contract to mint */
-    const { tokenId, expirationDate } = await mintOnBlockchain(walletAddress, metadataCID, metadata);
+    const { tokenId, expirationDate, receipt } = await mintOnBlockchain(walletAddress, metadataCID, metadata);
 
     /* 3. Save to DB */
     const nft = await NFT.create({
@@ -35,7 +35,7 @@ export const mintNFT = async (req, res) => {
       expirationDate
     });
 
-    res.status(201).json(nft);
+    res.status(201).json({ nft, receipt });
   } 
   catch(err) {
     console.error(err);
@@ -53,3 +53,4 @@ export const getNFTByTokenId = async (req, res) => {
   if (!nft) return res.status(404).json({ error: 'NFT not found' });
   res.status(200).json(nft);
 };
+
