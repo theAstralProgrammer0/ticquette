@@ -12,7 +12,7 @@ import userRoutes from './routes/userRoutes.js';
 //import nftRoutes from './routes/nftRooutes';
 
 // Import database connection
-//import { dbClient } from './config/database';
+// import { dbClient } from './config/database.js';
 //import { redisClient } from './config/redis';
 
 
@@ -47,7 +47,7 @@ app.use(morgan('combined'));
 
 
 /* use all routes from routes/ */
-app.use(userRoutes);
+app.use('/api', userRoutes);
 
 // When no route matches 
 app.all('*', (req, res, next) => {
