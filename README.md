@@ -1,11 +1,17 @@
 # Ticquette NFT Project
 
-A full-stack dApp for leasing NFTs, featuring a Hardhat smart contract and an Express.js backend API.
+## Overview
+Ticquette is a decentralized application (dApp) that revolutionizes kiosk
+rental through blockchain technology and NFTs. The platform enables seamless
+rental of digital kiosks, vending machines, and interactive terminals using
+Non-Fungible Tokens as proof of ownership and access rights.
+This is the backend dApp for generating leasing NFTs, featuring a Hardhat smart
+contract and an Express.js backend API.
 
 ## 📁 Repository Structure
 
 ```
-ticquette-nft-project/
+ticquette/
 │
 ├── smart-contract/                 # Hardhat Smart Contract
 │   ├── contracts/                  # Solidity source files
@@ -35,8 +41,7 @@ ticquette-nft-project/
 │   │   ├── utils/                  # Helper modules
 │   │   │   ├── ipfsUtils.js        # Pinata IPFS integration
 │   │   │   ├── contractUtils.js    # ethers.js contract wrapper
-│   │   │   ├── validation.js       # Metadata validation
-│   │   │   └── redis.js            # Redis caching client
+│   │   │   └── validation.js       # Metadata validation
 │   │   ├── config/                 # Configuration clients
 │   │   │   ├── db.js               # MongoDB client
 │   │   │   └── redis.js            # Redis client
@@ -177,7 +182,7 @@ curl http://localhost:5000/api/nft/0
 ## 📚 Testing & Development
 
 * **Smart Contract Tests**: `cd smart-contract && npm test`
-* **Backend Tests**: *(to be added)*
+* **Backend Tests**: `cd backend-api && npm test`
 
 ---
 
