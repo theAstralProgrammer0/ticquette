@@ -1,6 +1,6 @@
-import User from '../models/User';
-import redisClient from '../config/redis';
-import dbClient from '../config/db';
+import User from '../models/User.js';
+import redisClient from '../config/redis.js';
+import dbClient from '../config/db.js';
 
 export const postNewUser = async (req, res) => {
   const { walletAddress } = req.body;
