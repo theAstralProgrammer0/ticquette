@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol"; // Ensure this import is present
 
 contract TicquetteNFT is ERC721, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
@@ -16,12 +16,14 @@ contract TicquetteNFT is ERC721, ERC721URIStorage, Ownable {
     event TicquetteMinted(
         uint256 indexed tokenId,
         address indexed owner,
-        string metadataURI
+        string metadataURI,
+        uint256 expirationDate // Event declaration expects this
     );
 
     event LeaseTransferred(uint256 indexed tokenId, address indexed from, address indexed to);
 
     constructor(address initialOwner) ERC721("TicquetteNFT", "TICQ") {
+        // Correct way to transfer ownership after ERC721 initialization
         _transferOwnership(initialOwner);
     }
 
@@ -29,12 +31,17 @@ contract TicquetteNFT is ERC721, ERC721URIStorage, Ownable {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
 
+        // Add to owner's token list
         ownerTokens[to].push(tokenId);
 
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
 
-        emit TicquetteMinted(tokenId, to, uri);
+        // Calculate a default expiration date for the event, e.g., 1 year from now
+        uint256 defaultExpirationDate = block.timestamp + (365 * 24 * 60 * 60); // 1 year in seconds
+
+        // Emit the event with all declared arguments
+        emit TicquetteMinted(tokenId, to, uri, defaultExpirationDate);
         return tokenId;
     }
 
