@@ -1,8 +1,8 @@
-import { pinMetadataToIPFS } from '../utils/ipfsUtils';
-import { mintOnBlockchain } from '../utils/contractUtils';
-import NFT from '../models/NFT';
-import { validateMetadata } frim '../utils/validation';
-import redisClient from '../utils/redis';
+import { pinMetadataToIPFS } from '../utils/ipfsUtils.js';
+import { mintOnBlockchain } from '../utils/contractUtils.js';
+import NFT from '../models/NFT.js';
+import { validateMetadata } from '../utils/validation.js';
+import redisClient from '../config/redis.js';
 
 export const mintNFT = async (req, res) => {
   try {
@@ -49,6 +49,7 @@ export const getAllNFTs = async (req, res) => {
 };
 
 export const getNFTByTokenId = async (req, res) => {
+  console.log(req.params.tokenId);
   const nft = await NFT.findOne({ tokenId: req.params.tokenId });
   if (!nft) return res.status(404).json({ error: 'NFT not found' });
   res.status(200).json(nft);
