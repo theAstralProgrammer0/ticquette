@@ -2,25 +2,43 @@ import { createClient } from 'redis';
 
 class RedisClient {
   constructor() {
-    this.client = createClient();
-    this.client.on('error', (err) => console.error('Redis Client Error', err));
-    this.client.connect();
+    this.client = createClient({
+      url: process.env.REDIS_URL || 'redis://localhost:6379'
+    });
+    this.client.on('error', (err) => console.error('Redis Client Error:', err));
+    this.client.connect().catch((err) => console.error('Redis Connect Error:', err));;
   }
 
   isAlive() {
-    return this.client.isReady;
+    return this.client.isOpen;
   }
 
   async get(key) {
-    return this.client.get(key);
+    try {
+      const value = await this.client.get(key);
+      console.log("Redis GET operation successful");
+      return value;
+    }
+    catch (err) {
+      console.error("Redis GET operation error: ", err)
+      return null;
+    }
   }
 
   async set(key, val, duration) {
-    await this.client.setEx(key, duration, value);
+    try {
+      await this.client.set(key, String(val), { EX: duration });
+      console.log("Redis SET operation successful");
+    }
+    catch (err) {console.error("Redis SET operation error: ", err)};
   }
 
   async del(key) {
-    await this.client.del(key);
+    try {
+      await this.client.del(key);
+      console.log("Redis DEL operation successful");
+    }
+    catch(err) {console.error("Redis DEL operation error: ", err)};
   }
 }
 
