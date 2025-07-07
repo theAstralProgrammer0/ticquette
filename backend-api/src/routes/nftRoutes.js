@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { mintNFT, getAllNFTs, getNFTByTokenId } from '../controllers/nftController.js';
 
-const router = Router();
+const nftRouter = Router();
 
-router.post('/mint', mintNFT);
-router.get('/nfts', getAllNFTs);
-router.get('/nft/:tokenId', getNFTByTokenId);
+nftRouter.post('/mint', mintNFT);
+nftRouter.get('/nfts', getAllNFTs);
+nftRouter.get('/nft/:tokenId', getNFTByTokenId);
 
-export default router;
+export default nftRouter;
 

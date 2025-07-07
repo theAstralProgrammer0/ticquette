@@ -1,7 +1,7 @@
-import redisClient from '../utils/redis';
-import dbClient from '../utils/db';
-import User from '../models/User';
-import NFT from '../models/NFT';
+import redisClient from '../config/redis.js';
+import dbClient from '../config/db.js';
+import User from '../models/User.js';
+import NFT from '../models/NFT.js';
 
 export const getStatus = async (req, res) => {
   const status = {
