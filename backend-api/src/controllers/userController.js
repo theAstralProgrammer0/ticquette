@@ -62,7 +62,7 @@ export const getUserById = async (req, res) => {
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     const response = { id: user._id, walletAddress: user.walletAddress };
-    await redisClient.set(cacheKey, JSON.strimgify(response), 300);
+    await redisClient.set(cacheKey, JSON.stringify(response), 300);
     return res.status(200).json(response);
   }
   catch (error) {
