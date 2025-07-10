@@ -35,4 +35,4 @@ node_modules
 ignition/deployments/chain-31337
 
 # notes
-[0-9]-deployed
+deployed
