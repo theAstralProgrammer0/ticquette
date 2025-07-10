@@ -45,6 +45,7 @@ export const mintNFT = async (req, res) => {
 
 export const getAllNFTs = async (req, res) => {
   const nfts = await NFT.find();
+  if (!nfts || nfts.length === 0) return res.status(404).json({ error: 'No NFTs found' });
   res.status(200).json(nfts);
 };
 
@@ -55,3 +56,29 @@ export const getNFTByTokenId = async (req, res) => {
   res.status(200).json(nft);
 };
 
+export const transferNFTOwnership = async (req, res) => {
+  const { tokenId } = req.params;
+  const { newWalletAddress } = req.body;
+
+  if(!newWalletAddress) {
+    return res.status(404).json({ error: 'New wallet address is required' });
+  }
+  
+  try {
+    // Find the NFT by tokenId
+    const nft = await NFT.findOne({ tokenId })
+    if (!nft) {
+      return res.status(404).json({ error: 'NFT not found' });
+    }
+
+
+    //Update the owner
+    nft.owner = newWalletAddress;
+    
+    await nft.save();
+
+    res.status(200).json({ message: 'Ownership transferred successfully', nft });
+  } catch (error) {
+    console.error("Error transferring NFT ownership:", error);
+  }
+}
